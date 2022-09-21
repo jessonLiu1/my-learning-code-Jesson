@@ -141,7 +141,7 @@ void soundexSearch(string filepath) {
     /* TODO: Fill in the remainder of this function. */
     string name;
     string temp;
-    vector<string> matchResult;
+    Vector<string> matchResult;
     while(1){
         matchResult.clear();
         name = getLine("Enter a surname (type Enter to quit):");
@@ -158,14 +158,10 @@ void soundexSearch(string filepath) {
         cout << "Soundex code is " << temp << endl;
         for (int i = 0; i < databaseNames.size(); i++){
             if (temp == soundex(databaseNames[i]))
-                matchResult.push_back(databaseNames[i]);
+                matchResult.add(databaseNames[i]);
         }
-        sort(matchResult.begin(), matchResult.end());
-        cout << "Matches from database:" << matchResult.size();
-        for (int i = 0; i < matchResult.size(); i++)
-            cout << matchResult[i] << ", ";
-        if (matchResult.size() != 0)
-            cout << matchResult.back() << endl;
+        matchResult.sort();
+        cout << "Matches from database:" << matchResult << endl;
     }
 }
 
