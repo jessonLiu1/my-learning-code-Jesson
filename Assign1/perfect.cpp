@@ -172,8 +172,9 @@ STUDENT_TEST("Confirm smarterSum of small inputs") {
 STUDENT_TEST("Confirm 33550336 is perfect") {
     EXPECT(isPerfect(33550336));
 }
-*/
 STUDENT_TEST("Test for the conrectness of findNthPerfectEuclid function") {
     EXPECT(isPerfect(findNthPerfectEuclid(5)));
     TIME_OPERATION(5, findNthPerfectEuclid(5));
+    EXPECT_EQUAL(findNthPerfectEuclid(2), 28);
 }
+*/
