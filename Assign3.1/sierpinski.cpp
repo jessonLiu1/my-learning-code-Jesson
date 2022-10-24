@@ -1,9 +1,4 @@
-/*
- * TODO: remove and replace this file header comment
- * You will edit and turn in this file.
- * Remove starter comments and add your own
- * comments on each function and on complex code sections.
- */
+//Sierpinski fractal
 #include <iostream>    // for cout, endl
 #include "recursion.h"
 #include "testing/SimpleTest.h"
@@ -19,13 +14,20 @@ void fillBlackTriangle(GWindow& window, GPoint one, GPoint two, GPoint three) {
     window.fillPolygon( {one, two, three} );
 }
 
-/*
- * TODO: Replace this comment with a descriptive function
- * header comment.
- */
+//Determine the coordinates of the points to be drawn
 int drawSierpinskiTriangle(GWindow& window, GPoint one, GPoint two, GPoint three, int order) {
     /* TODO: Implement this function. */
-    return 0;
+    if (order == 0){
+       fillBlackTriangle(window, one, two, three);
+       return 1;
+    }
+    GPoint newOne = {(one.x + two.x)/2, (one.y + two.y)/2};
+    GPoint newTwo = {(three.x + two.x)/2, (three.y + two.y)/2};
+    GPoint newThree = {(three.x + one.x)/2, (three.y + one.y)/2};
+    int numLeft = drawSierpinskiTriangle(window, newOne, newTwo, two, order - 1);
+    int numRight = drawSierpinskiTriangle(window, newThree, newTwo, three, order - 1);
+    int numTop = drawSierpinskiTriangle(window, newThree, newOne, one, order - 1);
+    return numLeft + numRight + numTop;
 }
 
 

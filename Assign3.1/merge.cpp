@@ -1,21 +1,28 @@
-/*
- * TODO: remove and replace this file header comment
- * You will edit and turn in this file.
- * Remove starter comments and add your own
- * comments on each function and on complex code sections.
- */
+//多路并归
 #include <iostream>    // for cout, endl
 #include "queue.h"
 #include "testing/SimpleTest.h"
 using namespace std;
 
-/*
- * TODO: Replace this comment with a descriptive function
- * header comment.
- */
+//双路并归
 Queue<int> binaryMerge(Queue<int> a, Queue<int> b) {
     Queue<int> result;
     /* TODO: Implement this function. */
+    while (a.size() != 0 || b.size() != 0){
+        int temp = -2147483648;
+        if (!result.isEmpty())
+            temp = result.peek();
+        if (a.isEmpty())
+            result.enqueue(b.dequeue());
+        else if (b.isEmpty())
+            result.enqueue(a.dequeue());
+        else if (a.peek() <= b.peek())
+            result.enqueue(a.dequeue());
+        else
+            result.enqueue(b.dequeue());
+        if (result.peek() < temp)
+            exit(EXIT_FAILURE);
+    }
     return result;
 }
 
@@ -36,13 +43,20 @@ Queue<int> naiveMultiMerge(Vector<Queue<int>>& all) {
     return result;
 }
 
-/*
- * TODO: Replace this comment with a descriptive function
- * header comment.
- */
+//多路并归
 Queue<int> recMultiMerge(Vector<Queue<int>>& all) {
     Queue<int> result;
     /* TODO: Implement this function. */
+    int mid = all.size() / 2;
+    if (all.size() == 2)
+        result = binaryMerge(all[0], all[1]);
+    else if (all.size() == 1)
+        result = all[0];
+    else {
+        Vector<Queue<int>> left = all.subList(0, mid);
+        Vector<Queue<int>> right = all.subList(mid);
+        result = binaryMerge(recMultiMerge(left), recMultiMerge(right));
+    }
     return result;
 }
 
@@ -105,6 +119,16 @@ PROVIDED_TEST("Time recMultiMerge operation") {
 }
 
 
+STUDENT_TEST("naiveMultiMerge with empty queue") {
+    Vector<Queue<int>> all = {{},
+                             {},
+                             {},
+                             {}
+                            };
+    Queue<int> expected = {};
+    EXPECT_EQUAL(naiveMultiMerge(all), expected);
+}
+
 /* Test helper to fill queue with sorted sequence */
 Queue<int> createSequence(int size) {
     Queue<int> q;
@@ -121,3 +145,5 @@ void distribute(Queue<int> input, Vector<Queue<int>>& all) {
         all[randomInteger(0, all.size()-1)].enqueue(input.dequeue());
     }
 }
+
+

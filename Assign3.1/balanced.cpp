@@ -1,38 +1,81 @@
-/*
- * TODO: remove and replace this file header comment
- * You will edit and turn in this file.
- * Remove starter comments and add your own
- * comments on each function and on complex code sections.
- */
+//Judge the matching of brackets in a string
 #include <iostream>    // for cout, endl
 #include <string>      // for string class
 #include "recursion.h"
 #include "testing/SimpleTest.h"
 
 using namespace std;
+int g_iNum = 0;
 
-/*
- * TODO: Replace this comment with a descriptive function
- * header comment.
- */
-void operatorsFrom(const string &str, int &index, string &cleanStr) {
-    /* TODO: Implement this function. */
+//clean the string
+string operatorsFrom(string str) {
+
     Set<char> brackets = {'(',')','{','}','[',']'};
-    if (index == str.size() - 1)
-        return;
-    else if (brackets.contains(str.at(index)))
-        cleanStr += str.at(index);
-    return operatorsFrom(str, index, cleanStr);
+    if (str.size() == 0)
+        return "";
+    if (brackets.contains(str.at(str.size() - 1)))
+        return operatorsFrom(str.substr(0, str.size() - 1)) + str.at(str.size() - 1);
+    else
+        return operatorsFrom(str.substr(0, str.size() - 1));
 }
 
-/*
- * TODO: Replace this comment with a descriptive function
- * header comment.
- */
+//judge the matching of brackets
+#define v2
+
+#ifdef v2
 bool operatorsAreMatched(string ops) {
-    /* TODO: Implement this function. */
+
+    if (ops.empty())
+        return true;
+
+    int middleBrackets = ops.find("[]");
+    if (middleBrackets != string::npos){
+        ops.erase(middleBrackets, 2);
+        return operatorsAreMatched(ops);
+    }
+
+    int littleBrackets = ops.find("()");
+    if (littleBrackets != string::npos){
+        ops.erase(littleBrackets, 2);
+        return operatorsAreMatched(ops);
+    }
+
+    int largeBrackets = ops.find("{}");
+    if (largeBrackets != string::npos){
+        ops.erase(largeBrackets, 2);
+        return operatorsAreMatched(ops);
+    }
+
     return false;
+
 }
+#endif
+
+#ifdef v1
+bool operatorsAreMatched(string ops) {
+    Set<char> rightBrackets = {')','}',']'};
+    if (ops.empty()){
+        g_iNum = 0;
+        return true;
+    }
+    else if (ops.size() % 2 == 1 || rightBrackets.contains(ops.at(g_iNum))){
+        g_iNum = 0;
+        return false;
+    }
+    else if (ops.at(g_iNum + 1) - ops.at(g_iNum) != 1 && ops.at(g_iNum + 1) - ops.at(g_iNum) != 2){ // judge the matching of brackets by ascii code
+        g_iNum += 1;
+        return operatorsAreMatched(ops);
+    }
+    else{
+        ops.erase(g_iNum, 2);
+        if (g_iNum != 0)
+            g_iNum -= 1;
+        return operatorsAreMatched(ops);
+    }
+}
+#endif
+
+
 
 /*
  * The isBalanced function assumes correct implementation of
@@ -45,10 +88,8 @@ bool operatorsAreMatched(string ops) {
  * correctly, the provided isBalanced will correctly report whether
  * the input string has balanced bracketing operators.
  */
-bool isBalanced(const string str) {
-    int index = 0;
-    string ops;
-    operatorsFrom(str, index, ops);
+bool isBalanced(string str) {
+    string ops = operatorsFrom(str);
     return operatorsAreMatched(ops);
 }
 
@@ -72,4 +113,15 @@ PROVIDED_TEST("isBalanced on non-balanced examples from writeup") {
     EXPECT(!isBalanced("( ( [ a ] )"));
     EXPECT(!isBalanced("3 ) ("));
     EXPECT(!isBalanced("{ ( x } y )"));
+}
+
+STUDENT_TEST("operatorsFrom on simple example") {
+    EXPECT_EQUAL(operatorsFrom(""), "");
+    EXPECT_EQUAL(operatorsFrom(" [SSX]./;'["), "[][");
+    EXPECT_EQUAL(operatorsFrom(" [SSX]./;{'[ "), "[]{[");
+}
+
+STUDENT_TEST("operatorsAreMatched on conplex example") {
+    EXPECT(operatorsAreMatched("{[()][]}"));
+    EXPECT(!operatorsAreMatched("{[[(])][]}"));
 }

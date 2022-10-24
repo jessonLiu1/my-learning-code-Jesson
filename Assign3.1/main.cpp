@@ -11,6 +11,7 @@ using namespace std;
  */
 
 int main() {
+
     if (runSimpleTests(SELECTED_TESTS)) {
         return 0;
     }
@@ -22,7 +23,7 @@ int main() {
 // Do not remove or edit below this line. It is here to confirm that your code
 // conforms to the expected function prototypes needed for grading
 void confirmFunctionPrototypes() {
-    /* str;
+    string str;
     int i = 0;
     bool b;
     b = isBalanced(str);
@@ -35,5 +36,5 @@ void confirmFunctionPrototypes() {
     Vector<Queue<int>> v;
     q = binaryMerge(q, q);
     q = naiveMultiMerge(v);
-    q = recMultiMerge(v);*/
+    q = recMultiMerge(v);
 }
