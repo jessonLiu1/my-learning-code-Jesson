@@ -44,6 +44,31 @@ Queue<int> naiveMultiMerge(Vector<Queue<int>>& all) {
 }
 
 //多路并归
+#define v2
+#ifdef v2
+
+void recMultiMergeRec(Vector<Queue<int>>& all, int begin, int end, Queue<int> &result) {
+    if (end - begin == 1)
+        result = binaryMerge(all[begin], all[end]);
+    else if (end == begin)
+        result = all[begin];
+    else {
+        Queue<int> left, right;
+        recMultiMergeRec(all, begin, begin + (end - begin) / 2, left);
+        recMultiMergeRec(all, begin + (end - begin) / 2 + 1, end, right);
+        result = binaryMerge(left, right);
+    }
+}
+
+Queue<int> recMultiMerge(Vector<Queue<int>>& all) {
+    Queue<int> result;
+    /* TODO: Implement this function. */
+    recMultiMergeRec(all, 0, all.size() - 1, result);
+    return result;
+}
+#endif
+
+#ifdef v1
 Queue<int> recMultiMerge(Vector<Queue<int>>& all) {
     Queue<int> result;
     /* TODO: Implement this function. */
@@ -59,6 +84,8 @@ Queue<int> recMultiMerge(Vector<Queue<int>>& all) {
     }
     return result;
 }
+#endif
+
 
 
 /* * * * * * Test Cases * * * * * */
